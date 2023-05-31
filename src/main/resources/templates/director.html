@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org" lang="ru">
+
+<head>
+    <title th:text="${director.name}"></title>
+    <link rel="stylesheet" href="/sessions_style.css">
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body class="d-flex flex-column h-100" style="">
+
+<header th:insert="blocks/header :: header" class="sticky-top" role="navigation"></header>
+
+<hr class="clear">
+
+<main class="container flex-shrink-0 bg-light">
+    <div class="row">
+        <div class="col-lg-12 my-3">
+            <h1 th:text="${director.name}">Name</h1>
+        </div>
+        <div class="col-lg-4 mb-3">
+            <img class="poster-session w-100" th:attr="src=${'/img/' + director.poster}">
+            <div th:if="${director.owner.id == user.id}" class="btn-group mt-3">
+                <a th:href="'/directors/edit/' + ${director.id}" class="btn btn-primary">Редактировать</a>
+            </div>
+            <div th:if="${director.owner.id == user.id}" class="btn-group mt-3">
+                <a th:href="'/directors/delete/' + ${director.id}" class="btn btn-danger">Удалить</a>
+            </div>
+            <div th:if="${director.owner.id == user.id}" class="btn-group mt-3">
+                <a th:href="'/sessions/add/' + ${director.id}" class="btn btn-primary">Добавить сеанс</a>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div>
+                <b>Годы жизни: </b>
+                <span th:text="${director.birthday}"></span> - <span th:text="${director.die}"></span>
+            </div>
+            <h4>Описание</h4>
+            <p class="description text-break" th:text="${director.description}"></p>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-lg-3" th:each="s : ${director.sessions}">
+            <div class="card mb-4 rounded-3 shadow-sm">
+                <a class="session" th:href="'/sessions/' + ${s.id}">
+                    <img class="poster-session mb-3" th:src="'/img/' + ${s.poster}" width="100%">
+                    <h4 th:text="${s.name}" class="card-title pricing-card-title mx-3 text-break">Название фильма</h4>
+                </a>
+                <ul class="list-unstyled mt-3 mb-3 mx-3">
+                    <li>Жанр: <a th:text="${s.genre}" th:href="'/catalog/genre/' + ${s.genre}"></a></li>
+                    <li>Премьера: <a th:text="${s.year}" th:href="'/catalog/year/' + ${s.year}"></a></li>
+                    <li>Собрано средств: <span th:text="${s.price}"></span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="pt-5"></div>
+</main>
+
+<script type="text/javascript" src="/session_script.js"></script>
+
+<hr class="clear">
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title th:text="${s.name}"></title>
+    <link rel="stylesheet" href="/static/sessions_style.css">
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body class="d-flex flex-column h-100" style="">
+
+<header th:insert="blocks/header :: header" class="sticky-top" role="navigation"></header>
+
+<hr class="clear">
+
+<main class="container-lg flex-shrink-0 bg-light">
+    <div class="row">
+        <div class="col-lg-12 my-3">
+            <h1 th:text="${s.name}">Name</h1>
+        </div>
+        <div class="col-lg-4 mb-3">
+            <img class="poster-session" th:attr="src=${'/img/' + s.poster}">
+            <div th:if="${s.director.owner.id == user.id}" class="btn-group mt-3">
+                <a th:href="'/sessions/edit/' + ${s.id}" class="btn btn-primary">Редактировать</a>
+            </div>
+            <div th:if="${s.director.owner.id == user.id}" class="btn-group mt-3">
+                <a th:href="'/sessions/delete/' + ${s.id}" class="btn btn-danger">Удалить</a>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div>
+                <div><b>Год выпуска: </b><a th:text="${s.year}" th:href="'/catalog/year/' + ${s.year}"></a>
+                </div>
+                <div><b>Жанр: </b><span><a th:text="${s.genre}"
+                                           th:href="'/catalog/genre/' + ${s.genre}"></a></span>
+                </div>
+                <div><b>Зал: </b><span th:text="${s.pub}"></span></div>
+                <div><b>Режиссер: </b><a th:href="'/directors/' + ${s.director.id}">
+                    <span th:text="${s.director.name}"></span></a></div>
+                <div><b>Премьера: </b><span th:text="${s.date}"></span></div>
+                <div><b>Собрано средств: </b><span th:text="${s.price}"></span></div>
+                <div><b>Добавлено в закладки: </b><span th:text="${s.count}"></span></div>
+                <div><b>Средние оценки</b></div>
+                <div th:if="${s.acting}"><b>Актерская игра: </b><span th:text="${acting}"></span></div>
+                <div th:if="${s.music}"><b>Музыка: </b><span th:text="${music}"></span></div>
+                <div th:if="${s.plot}"><b>Сюжет: </b><span th:text="${plot}"></span></div>
+                <hr>
+                <a class="w-100 btn btn-lg btn-primary mt-3" th:href="'/sessions/buy/' + ${s.id}">Добавить в
+                    закладки</a>
+            </div>
+        </div>
+        <div class="col-lg-12 mt-3">
+            <h4>Описание</h4>
+            <p class="description text-break" th:text="${s.description}"></p>
+        </div>
+        <div class="col-lg-12 mt-3">
+            <h4>Фотография</h4>
+            <center>
+                <div class="row">
+                    <div th:each="i : ${s.screenshots}" class="col-6">
+                        <img class="poster-session my-2" th:attr="src=${'/img/' + i}">
+                    </div>
+                </div>
+                <hr class="clear">
+            </center>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 mt-5">
+            <form th:action="'/sessions/comment/add/' + ${s.id}" method="post">
+                <h4>Оцените фильм</h4>
+                <div class="alert alert-primary">
+                    <div class="row">
+                        <div class="col"><input required name="acting" type="number" min="0" max="10" step="1"
+                                                class="form-control" placeholder="Оцените актерскую игру"></div>
+                        <div class="col"><input required name="music" type="number" min="0" max="10" step="1"
+                                                class="form-control" placeholder="Оцените музыку"></div>
+                        <div class="col"><input required name="plot" type="number" min="0" max="10" step="1"
+                                                class="form-control" placeholder="Оцените сюжет"></div>
+                    </div>
+                    <input type="text" id="date" name="date" hidden>
+                    <input placeholder="Добавить отзыв (опционально)" class="form-control mt-2" type="text" name="comment"
+                           id="comment">
+                    <div class="btn-group mt-2">
+                        <button class="btn btn-primary" type="submit">Добавить отзыв</button>
+                        <button class="btn btn-primary" type="reset">Очистить</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-12" th:each="c : ${s.comments}">
+            <div class="alert alert-secondary">
+                <h5>
+                    <span th:text="${c.username}"></span>
+                    <span>|</span>
+                    <span th:text="${c.date}"></span>
+                </h5>
+                <hr>
+                <div class="row">
+                    <div class="col"><p class="lead">Актерская игра: <span th:text="${c.acting}"></span></p></div>
+                    <div class="col"><p class="lead">Музыка: <span th:text="${c.music}"></span></p></div>
+                    <div class="col"><p class="lead">Сюжет: <span th:text="${c.plot}"></span></p></div>
+                </div>
+                <hr>
+                <p class="description text-break" th:text="${c.comment}"></p>
+            </div>
+        </div>
+    </div>
+    <div class="pt-5"></div>
+</main>
+
+<script type="text/javascript" src="/static/session_script.js"></script>
+
+<hr class="clear">
+
+
+</body>
+
+</html>

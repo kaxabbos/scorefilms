@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org" lang="ru">
+
+<head>
+    <title>Редактирование</title>
+    <link rel="stylesheet" href="/session_add_edit_style.css">
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body class="d-flex flex-column h-100" style="">
+
+<header th:insert="blocks/header :: header" class="sticky-top"></header>
+
+<hr class="clear">
+
+<main class="container-lg flex-shrink-0 bg-light">
+    <form th:action="'/sessions/edit/' + ${s.id}" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-lg-12 input-group flex-nowrap size-150">
+                <label for="name" class="input-group-text">Название фильма</label>
+                <input id="name" name="name" type="text" class="form-control"
+                       required th:value="${s.name}">
+            </div>
+            <div class="col-lg-6 size-150">
+                <div class=" input-group">
+                    <label for="pub" class="input-group-text">Зал</label>
+                    <input id="pub" name="pub" type="text" class="form-control"
+                          required th:value="${s.pub}">
+                </div>
+                <div class="input-group">
+                    <label for="directors" class="input-group-text">Режиссер</label>
+                    <input id="directors" name="directors" type="text" class="form-control"
+                           required th:value="${s.director.name}" readonly>
+                </div>
+                <div class="input-group">
+                    <label for="isbn" class="input-group-text">Премьера</label>
+                    <input id="isbn" name="date" type="date" class="form-control"
+                           required th:value="${s.date}">
+                </div>
+                <div class="input-group">
+                    <label for="poster" class="input-group-text">Постер</label>
+                    <input id="poster" name="poster" type="file" class="form-control"
+                           accept=".jpg,.jpeg,.png">
+                </div>
+                <div class="input-group">
+                    <label for="screenshots" class="input-group-text">Скриншоты</label>
+                    <input id="screenshots" name="screenshots" type="file" class="form-control"
+                           accept=".jpg,.jpeg,.png" multiple>
+                </div>
+            </div>
+            <div class="col-lg-6 size-150">
+                <div class=" input-group">
+                    <label for="year" class="input-group-text">Год выпуска</label>
+                    <input id="year" name="year" min="1900" max="2100" type="number" maxlength="4"
+                           class="form-control" required th:value="${s.year}">
+                </div>
+                <div class="input-group">
+                    <label for="price" class="input-group-text">Собрано средств</label>
+                    <input id="price" name="price" type="number" step="1" minlength="1" maxlength="1000"
+                           class="form-control" required th:value="${s.price}">
+                </div>
+                <div class="input-group">
+                    <label for="genre" class="input-group-text">Выберите жанр</label>
+                    <select id="genre" name="genre" class="form-control">
+                        <option th:each="g : ${genres}" th:value="${g}" th:label="${g}" th:selected="${g == s.genre}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <h4><label for="description">Описание</label></h4>
+                <input type="text" class="form-control" name="description" id="description" required
+                       th:value="${s.description}">
+            </div>
+        </div>
+        <button class="btn btn-lg btn-primary" type="submit">Обновить</button>
+        <button class="btn btn-lg btn-primary" type="reset">Вернуть назад</button>
+        <a class="btn btn-lg btn-primary" href="/catalog/all">Отмена</a>
+    </form>
+    <div class="pt-3"></div>
+</main>
+
+<hr class="clear">
+
+
+
+</body>
+
+</html>
